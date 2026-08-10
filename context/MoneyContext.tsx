@@ -16,7 +16,7 @@ export default function MoneyProvider( {children}: { children: React.ReactNode }
  const [money, setMoney] = useState(1000);
 
  function addMoney(amount: number) {
-   setMoney((prevMoney) => prevMoney + amount);
+     setMoney((prevMoney) => prevMoney + amount);
  }
 
  function subtractMoney(amount: number) {

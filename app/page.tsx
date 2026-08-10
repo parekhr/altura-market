@@ -51,7 +51,7 @@ const getShopItems = unstable_cache(
     });
   },
   ["shop-items"], // cache key
-  { revalidate: false } // cache for 1 hour, adjust as needed
+  { revalidate: false } // cache forever, adjust as needed
 );
 
 export default async function HomePage() {
@@ -62,6 +62,7 @@ export default async function HomePage() {
       {items.map((item) => (
         <ItemCard
           key={item.id}
+          id={item.id}
           itemName={item.itemName}
           imageSrc={item.imageSrc}
           text={item.text}
