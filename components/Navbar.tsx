@@ -8,7 +8,9 @@ import Link from "next/dist/client/link";
 export default function Navbar() {
   return (
     <nav className="flex h-16 items-stretch justify-between bg-[#70b8f0] px-6">
-  <span className="flex items-center text-lg font-bold text-sky-900">Altura Market</span>
+  <Link href="/" className="flex items-center text-lg font-bold text-sky-900">
+    Altura Market
+  </Link>
 
   <div className="flex items-stretch gap-2">
     <span className="my-auto flex items-center rounded-md border border-emerald-700 bg-emerald-100 px-2 py-2 font-bold text-emerald-800">
