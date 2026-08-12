@@ -1,6 +1,7 @@
 "use client";
 
 import { useMoney } from "@/context/MoneyContext";
+import { useCart } from "@/context/CartContext";
 
 import Link from "next/link";
 
@@ -8,6 +9,7 @@ import Link from "next/link";
 export default function Navbar() {
 
   const { money } = useMoney();
+  const { cartItems } = useCart();
 
   return (
     <nav className="flex h-16 items-stretch justify-between bg-[#70b8f0] px-6">
@@ -23,10 +25,13 @@ export default function Navbar() {
       Home
     </Link>
     <Link href="/cart" className="flex items-center font-bold px-4 text-slate-800 transition-colors hover:bg-sky-200 hover:text-slate-900">
-      Cart
+      {cartItems.length > 0 ? `Cart(${cartItems.length})` : "Cart"}
     </Link>
     <Link href="/inventory" className="flex items-center font-bold px-4 text-slate-800 transition-colors hover:bg-sky-200 hover:text-slate-900">
       Inventory
+    </Link>
+    <Link href="/transactions" className="flex items-center font-bold px-4 text-slate-800 transition-colors hover:bg-sky-200 hover:text-slate-900">
+      Transactions
     </Link>
   </div>
 </nav>

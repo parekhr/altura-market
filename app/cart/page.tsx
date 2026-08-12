@@ -3,17 +3,16 @@
 import { useCart } from "@/context/CartContext";
 import { useState, useEffect } from "react";
 import { useMoney } from "@/context/MoneyContext";
+import { purchaseItems } from "@/app/actions/purchase";
 
 
 export default function CartPage() {
 
-  const { cartItems, removeFromCart } = useCart();
+  const { cartItems, removeFromCart , addToCart, decreaseQuantity } = useCart();
 
   const [ showConfirmModal, setShowConfirmModal] = useState(false);
 
   const [ showPurchaseCompleteModal, setShowPurchaseCompleteModal] = useState(false);
-
-  const [enoughMoney, setEnoughMoney] = useState(false);
 
   const { money, subtractMoney } = useMoney();
 
@@ -29,10 +28,11 @@ export default function CartPage() {
       setTimeout(() => 
         removeFromCart(item.id), (index + 1) * 500);
     });
-    setTimeout(() => {
+    setTimeout(async () => {
       setShowPurchaseCompleteModal(true);
       subtractMoney(totalCost);
-    }, (cartItems.length + 1) * 500);    
+      await purchaseItems(cartItems);
+    }, (cartItems.length + 1) * 500);
   }
 
   function handleClosePurchaseComplete() {
@@ -51,23 +51,32 @@ export default function CartPage() {
   return (
     <>
       { cartItems.length === 0 ? (
-        <div className="flex h-screen max-w-2xl mx-auto flex-col items-center justify-center px-4">
-          <div className="w-full rounded-2xl border border-gray-200 bg-white p-8 shadow-md">
-          <h1 className="text-2xl font-bold">Your cart is empty</h1>
-          </div>
+        <div className="flex h-screen flex-col items-center justify-center gap-4">
+          <h1 className="text-2xl font-bold text-slate-900">Cart</h1>
+          <p className="text-lg text-slate-700">Your cart is currently empty.</p>
         </div>
         ) : (
   <div className="flex h-screen max-w-2xl mx-auto flex-col items-center justify-center px-4">
     <div className="w-full rounded-2xl border border-gray-200 bg-white p-8 shadow-md">
-      <h1 className="text-2xl font-bold">Your Cart</h1>
+      <h1 className="text-2xl font-bold">Cart</h1>
       <p className="text-lg text-slate-700">Items in your cart: {cartItems.length}</p>
-      <div>
+      <div className="divide-y divide-gray-300 border-y border-gray-300">
         {cartItems.map((item) => (
-          <div key={item.id} className="flex items-center gap-4 border-b border-gray-300 py-2">
+          <div key={item.id} className="flex items-center gap-4 py-2">
             <img src={item.imageSrc} alt={item.itemName} className="h-16 w-16 object-contain" />
             <div>
               <h3 className="text-lg font-semibold">{item.itemName.replace(/-/g, " ")}</h3>
-              <p className="text-sm text-gray-600">Quantity: {item.quantity}</p>
+              <div className="flex items-center gap-1 text-sm text-gray-600">
+                <span>Quantity: {item.quantity}</span>
+                <button 
+                  className="rounded border border-gray-300 bg-blue-200 px-1 text-xs hover:bg-gray-100 cursor-pointer"
+                  onClick={() => addToCart(item)}
+                  >▲</button>
+                <button 
+                  className="rounded border border-gray-300 bg-blue-200 px-1 text-xs hover:bg-gray-100 cursor-pointer"
+                  onClick={() => decreaseQuantity(item.id)}
+                  >▼</button>
+              </div>
               <p className="text-sm text-gray-600">Buy Cost: {item.purchase_price}¥</p>
             </div>
             <button 
@@ -105,14 +114,14 @@ export default function CartPage() {
           </p>
           <div className="mt-4 flex justify-end gap-2">
             <button
-              className="rounded-md bg-gray-200 px-4 py-2 text-sm font-semibold text-gray-800 hover:bg-gray-300 cursor-pointer"
-              onClick={handleCancelPurchase}>
-              Cancel
-            </button>
-            <button
               className="rounded-md bg-green-500 px-4 py-2 text-sm font-semibold text-white hover:bg-green-600 cursor-pointer"
               onClick={handleConfirmPurchase}>
               Confirm
+            </button>
+            <button
+              className="rounded-md bg-gray-200 px-4 py-2 text-sm font-semibold text-gray-800 hover:bg-gray-300 cursor-pointer"
+              onClick={handleCancelPurchase}>
+              Cancel
             </button>
           </div>
         </div>
@@ -124,7 +133,7 @@ export default function CartPage() {
         <div className="w-full max-w-sm rounded-2xl bg-white p-6 shadow-xl">
           <h2 className="text-lg font-bold">Purchase Complete</h2>
           <p className="mt-2 text-sm text-gray-600">
-            Thanks for your purchase!
+            Thanks for your purchase! Your items will be in your inventory.
           </p>
           <div className="mt-4 flex justify-end">
             <button
