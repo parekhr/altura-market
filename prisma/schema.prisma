@@ -9,7 +9,7 @@ generator client {
 }
 
 datasource db {
-  provider = "sqlite"
+  provider = "postgresql"
 }
 
 model InventoryItem {
@@ -42,4 +42,20 @@ model Transaction {
 model Balance {
   sessionId String @id
   money     Int    @default(5000)
+}
+
+model Sale {
+  id              Int      @id @default(autoincrement())
+  word            String
+  discountPercent Int
+  expiresAt       DateTime
+}
+
+model SaleItemUsage {
+  id            Int @id @default(autoincrement())
+  saleId        Int
+  itemId        Int
+  usesRemaining Int
+
+  @@unique([saleId, itemId])
 }

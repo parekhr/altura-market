@@ -3,5 +3,5 @@
 import { revalidateTag } from "next/cache";
 
 export async function randomizeItems() {
-  revalidateTag("shop-items");
+  revalidateTag("shop-items", "max");
 }

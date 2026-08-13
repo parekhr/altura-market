@@ -1,6 +1,12 @@
 import { unstable_cache } from "next/cache";
-import ItemCard from "@/components/ItemCard";
 import { randomizeItems } from "@/app/actions/randomize";
+import { prisma } from "@/lib/prisma";
+import { ensureActiveSale } from "@/app/actions/sale";
+import { SALE_WORD_PLURALS } from "@/lib/saleWords";
+import SaleTimer from "@/components/SaleTimer";
+import ItemGrid from "@/components/ItemGrid";
+
+export const dynamic = "force-dynamic";
 
 async function getItem(id: number) {
   const res = await fetch(`https://pokeapi.co/api/v2/item/${id}`);
@@ -55,32 +61,39 @@ const getShopItems = unstable_cache(
   { revalidate: false , tags: ["shop-items"] } // cache forever, adjust as needed
 );
 
+function matchesSaleWord(itemName: string, word: string) {
+  return itemName.toLowerCase().split("-").includes(word);
+}
+
 export default async function HomePage() {
   const items = await getShopItems();
+  const sale = await ensureActiveSale();
+
+  const saleUsages = await prisma.saleItemUsage.findMany({ where: { saleId: sale.id } });
+  const usesRemainingByItemId = new Map(saleUsages.map((u) => [u.itemId, u.usesRemaining]));
+
+  const displayItems = items.map((item) => {
+    const usesRemaining = usesRemainingByItemId.get(item.id) ?? 5;
+    const onSale = matchesSaleWord(item.itemName, sale.word) && usesRemaining > 0;
+    const discountedPrice = onSale
+      ? Math.round(item.purchase_price * (1 - sale.discountPercent / 100))
+      : undefined;
+
+    return {
+      ...item,
+      onSale,
+      discountedPrice,
+      usesRemaining: onSale ? usesRemaining : undefined,
+    };
+  });
 
   return (
     <div className="p-8">
-      <form action={randomizeItems} className="mb-4">
-        <button
-          type="submit"
-          className="rounded-md bg-indigo-500 px-4 py-2 text-sm font-semibold text-white hover:bg-indigo-600 cursor-pointer transition-colors duration-200"
-        >
-          Randomize Items
-        </button>
-      </form>
-      <div className="grid grid-cols-4 gap-3 sm:grid-cols-6 md:grid-cols-8">
-        {items.map((item) => (
-          <ItemCard
-            key={item.id}
-            id={item.id}
-            itemName={item.itemName}
-            imageSrc={item.imageSrc}
-            text={item.text}
-            purchase_price={item.purchase_price}
-            sell_price={item.sell_price}
-          />
-        ))}
+      <SaleTimer expiresAt={sale.expiresAt.getTime()} />
+      <div className="mb-4 rounded-md border border-red-300 bg-red-50 px-4 py-2 text-sm font-bold text-red-800 text-center">
+        🔥 {sale.discountPercent}% OFF SALE FOR {SALE_WORD_PLURALS[sale.word].toUpperCase()}! 🔥
       </div>
+      <ItemGrid items={displayItems} randomizeAction={randomizeItems} />
     </div>
   );
 }

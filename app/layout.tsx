@@ -2,6 +2,7 @@ import Navbar from "@/components/Navbar";
 import "./globals.css";
 import MoneyProvider from "@/context/MoneyContext";
 import CartProvider from "@/context/CartContext";
+import SearchProvider from "@/context/SearchContext";
 import { Footer } from "./footer";
 import { getBalance } from "@/app/actions/session";
 
@@ -18,9 +19,11 @@ export default async function RootLayout({ children }: { children: React.ReactNo
         <body className="bg-[oklch(95.1%_0.026_236.824)]">
           <CartProvider>
             <MoneyProvider initialMoney={money}>
-              <Navbar />
-                {children}
-                <Footer/>
+              <SearchProvider>
+                <Navbar />
+                  {children}
+                  <Footer/>
+              </SearchProvider>
             </MoneyProvider>
           </CartProvider>
         </body>

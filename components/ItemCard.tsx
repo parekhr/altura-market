@@ -2,7 +2,17 @@
 
 import { useCart } from "@/context/CartContext";
 
-export default function ItemCard(props: { id: number; itemName: string; imageSrc: string; text: string; purchase_price: number; sell_price: number }) {
+export default function ItemCard(props: {
+  id: number;
+  itemName: string;
+  imageSrc: string;
+  text: string;
+  purchase_price: number;
+  sell_price: number;
+  onSale?: boolean;
+  discountedPrice?: number;
+  usesRemaining?: number;
+}) {
 
     const notForSale = props.purchase_price === 0 && props.sell_price === 0;
 
@@ -14,16 +24,37 @@ export default function ItemCard(props: { id: number; itemName: string; imageSrc
             itemName: props.itemName,
             imageSrc: props.imageSrc,
             text: props.text,
-            purchase_price: props.purchase_price,
+            purchase_price: props.onSale && props.discountedPrice != null ? props.discountedPrice : props.purchase_price,
             sell_price: props.sell_price,
         });
         console.log(`Added ${props.itemName} to cart`);
     }
 
     return (
-        <div className="flex h-full flex-col items-center rounded-lg border border-black p-3 shadow-lg bg-[oklch(93.2%_0.072_255.585)]">
+        <div className={
+            props.onSale
+                ? "flex h-full flex-col items-center rounded-lg border border-red-300 p-3 shadow-lg bg-red-50"
+                : "flex h-full flex-col items-center rounded-lg border border-black p-3 shadow-lg bg-[oklch(93.2%_0.072_255.585)]"
+        }>
     <div className="flex w-full flex-col items-end gap-1 text-[10px]">
-    <span className="rounded-full border border-black bg-[oklch(96.2%_0.044_156.743)] px-2 py-0.5 font-bold">Buy: {props.purchase_price}¥</span>
+    {props.onSale && (
+        <div className="flex w-full items-center justify-between">
+            <span className="text-sm leading-none">🔥</span>
+            <span className="rounded-full bg-red-500 px-2 py-0.5 font-bold text-white">
+                Sale ({props.usesRemaining} left)
+            </span>
+        </div>
+    )}
+    <span className="rounded-full border border-black bg-[oklch(96.2%_0.044_156.743)] px-2 py-0.5 font-bold">
+        {props.onSale ? (
+            <>
+                Buy: <span className="mr-1 text-gray-500 line-through">{props.purchase_price}¥</span>
+                {props.discountedPrice}¥
+            </>
+        ) : (
+            <>Buy: {props.purchase_price}¥</>
+        )}
+    </span>
     <span className="rounded-full border border-black bg-[oklch(93.6%_0.032_17.717)] px-2 py-0.5 font-bold">Sell: {props.sell_price}¥</span>
 </div>
     <img src={props.imageSrc} alt={props.itemName} className="h-16 w-16 object-contain" />
