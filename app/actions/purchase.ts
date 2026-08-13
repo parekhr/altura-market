@@ -1,5 +1,7 @@
 "use server";
 
+
+import { randomUUID } from "crypto";
 import { prisma } from "@/lib/prisma";
 import { getOrCreateSessionId } from "@/app/actions/session";
 
@@ -14,6 +16,7 @@ type PurchasedItem = {
 
 export async function purchaseItems(items: PurchasedItem[]) {
   const sessionId = await getOrCreateSessionId();
+  const orderId = randomUUID();
   const totalCost = items.reduce((sum, item) => sum + item.purchase_price * item.quantity, 0);
 
   for (const item of items) {
@@ -31,13 +34,16 @@ export async function purchaseItems(items: PurchasedItem[]) {
       },
     });
 
-    await prisma.transaction.create({
+        await prisma.transaction.create({
       data: {
         sessionId,
         itemId: item.id,
         itemName: item.itemName,
+        imageSrc: item.imageSrc,
         quantity: item.quantity,
         pricePaid: item.purchase_price * item.quantity,
+        type: "PURCHASE",
+        orderId,
       },
     });
   }

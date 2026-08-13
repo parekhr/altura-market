@@ -1,5 +1,6 @@
 import { unstable_cache } from "next/cache";
 import ItemCard from "@/components/ItemCard";
+import { randomizeItems } from "@/app/actions/randomize";
 
 async function getItem(id: number) {
   const res = await fetch(`https://pokeapi.co/api/v2/item/${id}`);
@@ -51,25 +52,35 @@ const getShopItems = unstable_cache(
     });
   },
   ["shop-items"], // cache key
-  { revalidate: false } // cache forever, adjust as needed
+  { revalidate: false , tags: ["shop-items"] } // cache forever, adjust as needed
 );
 
 export default async function HomePage() {
   const items = await getShopItems();
 
   return (
-    <div className="grid grid-cols-4 gap-3 p-8 sm:grid-cols-6 md:grid-cols-8">
-      {items.map((item) => (
-        <ItemCard
-          key={item.id}
-          id={item.id}
-          itemName={item.itemName}
-          imageSrc={item.imageSrc}
-          text={item.text}
-          purchase_price={item.purchase_price}
-          sell_price={item.sell_price}
-        />
-      ))}
+    <div className="p-8">
+      <form action={randomizeItems} className="mb-4">
+        <button
+          type="submit"
+          className="rounded-md bg-indigo-500 px-4 py-2 text-sm font-semibold text-white hover:bg-indigo-600 cursor-pointer transition-colors duration-200"
+        >
+          Randomize Items
+        </button>
+      </form>
+      <div className="grid grid-cols-4 gap-3 sm:grid-cols-6 md:grid-cols-8">
+        {items.map((item) => (
+          <ItemCard
+            key={item.id}
+            id={item.id}
+            itemName={item.itemName}
+            imageSrc={item.imageSrc}
+            text={item.text}
+            purchase_price={item.purchase_price}
+            sell_price={item.sell_price}
+          />
+        ))}
+      </div>
     </div>
   );
 }

@@ -31,8 +31,11 @@ model Transaction {
   sessionId     String
   itemId        Int
   itemName      String
+  imageSrc      String?
   quantity      Int
   pricePaid     Int
+  type          String   @default("PURCHASE")
+  orderId       String?
   purchasedAt   DateTime @default(now())
 }
 
