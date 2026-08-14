@@ -59,3 +59,8 @@ model SaleItemUsage {
 
   @@unique([saleId, itemId])
 }
+
+model ShopCatalog {
+  id    Int  @id
+  items Json
+}

@@ -1,7 +1,12 @@
 "use server";
 
-import { revalidateTag } from "next/cache";
+import { regenerateShopItems } from "@/lib/shopItems";
 
 export async function randomizeItems() {
-  revalidateTag("shop-items", "max");
+  try {
+    await regenerateShopItems();
+  } catch (err) {
+    console.error("[randomizeItems] failed:", err);
+    throw err;
+  }
 }

@@ -1,5 +1,7 @@
 "use client";
 
+import { useState } from "react";
+import { useRouter } from "next/navigation";
 import ItemCard from "@/components/ItemCard";
 import { useSearch } from "@/context/SearchContext";
 
@@ -18,27 +20,54 @@ type DisplayItem = {
 export default function ItemGrid({
   items,
   randomizeAction,
+  addMoneyAction,
 }: {
   items: DisplayItem[];
   randomizeAction: () => Promise<void>;
+  addMoneyAction: () => Promise<void>;
 }) {
   const { search, setSearch } = useSearch();
+  const [isRandomizing, setIsRandomizing] = useState(false);
+  const [isAddingMoney, setIsAddingMoney] = useState(false);
+  const router = useRouter();
 
   const filteredItems = items.filter((item) =>
     item.itemName.toLowerCase().includes(search.toLowerCase())
   );
 
+  async function handleRandomize() {
+    setIsRandomizing(true);
+    await randomizeAction();
+    router.refresh();
+    setIsRandomizing(false);
+  }
+
+  async function handleAddMoney() {
+    setIsAddingMoney(true);
+    await addMoneyAction();
+    router.refresh();
+    setIsAddingMoney(false);
+  }
+
   return (
     <>
       <div className="mb-4 grid grid-cols-[1fr_auto_1fr] items-center gap-2">
-        <form action={randomizeAction} className="justify-self-start">
+        <div className="flex justify-self-start gap-2">
           <button
-            type="submit"
-            className="rounded-md bg-indigo-500 px-4 py-2 text-sm font-semibold text-white hover:bg-indigo-600 cursor-pointer transition-colors duration-200"
+            onClick={handleRandomize}
+            disabled={isRandomizing}
+            className="rounded-md bg-indigo-500 px-4 py-2 text-sm font-semibold text-white hover:bg-indigo-600 disabled:cursor-not-allowed disabled:opacity-60 cursor-pointer transition-colors duration-200"
           >
-            Randomize Items
+            {isRandomizing ? "Randomizing..." : "Randomize Items"}
           </button>
-        </form>
+          <button
+            onClick={handleAddMoney}
+            disabled={isAddingMoney}
+            className="rounded-md bg-emerald-500 px-4 py-2 text-sm font-semibold text-white hover:bg-emerald-600 disabled:cursor-not-allowed disabled:opacity-60 cursor-pointer transition-colors duration-200"
+          >
+            {isAddingMoney ? "Adding..." : "Add 1000¥"}
+          </button>
+        </div>
         <div className="relative">
           <svg
             xmlns="http://www.w3.org/2000/svg"
