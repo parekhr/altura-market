@@ -8,7 +8,7 @@ A Pokémon-item shop demo app built with Next.js 16 and Prisma 7. Browse a rando
 - Buy items and manage them in a personal inventory
 - Sell items individually or all at once, with confirmation modals
 - Persistent money balance, stored server-side per session
-- Timed sale events — a random item category gets a discount for a few minutes, with a limited number of discounted units per item
+- Timed sale events - a random item category gets a discount for a few minutes, with a limited number of discounted units per item
 - Transaction history page, with multi-item purchases grouped into a single entry
 
 ## Tech Stack
@@ -54,16 +54,16 @@ npx @prisma/cli app deploy --framework nextjs --env .env --prod --yes
 
 ## Project Structure
 
-- `app/actions/` — Server Actions (purchase, sell, randomize items, add money, manage sales)
-- `app/` — pages: shop home, inventory, transactions
-- `lib/` — Prisma client setup, shop item generation, sale word list
-- `context/` — client-side React context (money, search, cart)
-- `components/` — shared UI components (item grid/card, sale timer, navbar)
+- `app/actions/` - Server Actions (purchase, sell, randomize items, add money, manage sales)
+- `app/` - pages: shop home, inventory, transactions
+- `lib/` - Prisma client setup, shop item generation, sale word list
+- `context/` - client-side React context (money, search, cart)
+- `components/` - shared UI components (item grid/card, sale timer, navbar)
 
 ## Data Model
 
-- **InventoryItem** — items a session currently owns
-- **Transaction** — purchase/sale history, grouped by `orderId` for multi-item orders
-- **Balance** — a session's current money
-- **Sale** / **SaleItemUsage** — the active timed sale and its per-item remaining discount uses
-- **ShopCatalog** — the current randomized item catalog
+- **InventoryItem** - items a session currently owns
+- **Transaction** - purchase/sale history, grouped by `orderId` for multi-item orders
+- **Balance** - a session's current money
+- **Sale** / **SaleItemUsage** - the active timed sale and its per-item remaining discount uses
+- **ShopCatalog** - the current randomized item catalog
