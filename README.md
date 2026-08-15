@@ -1,36 +1,69 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Altura Market
+
+A Pokémon-item shop demo app built with Next.js 16 and Prisma 7. Browse a randomly generated item catalog, buy and sell items, track a persistent money balance, and catch limited-time sales.
+
+## Features
+
+- Browse a live item catalog (pulled from PokéAPI) with a "Randomize Items" button to regenerate it
+- Buy items and manage them in a personal inventory
+- Sell items individually or all at once, with confirmation modals
+- Persistent money balance, stored server-side per session
+- Timed sale events — a random item category gets a discount for a few minutes, with a limited number of discounted units per item
+- Transaction history page, with multi-item purchases grouped into a single entry
+
+## Tech Stack
+
+- [Next.js 16](https://nextjs.org) (App Router, Server Components, Server Actions)
+- [Prisma 7](https://www.prisma.io) with the Postgres driver adapter
+- PostgreSQL (hosted on Prisma Postgres)
+- Tailwind CSS
+- Deployed on [Prisma Compute](https://www.prisma.io/docs/postgres/compute)
 
 ## Getting Started
 
-First, run the development server:
+1. Clone the repo and install dependencies:
+
+   ```bash
+   npm install
+   ```
+
+2. Set up your database connection. Create a `DATABASE_URL` pointing at a Postgres database (a [Prisma Postgres](https://www.prisma.io/postgres) instance works out of the box) and configure it in `prisma.config.ts` / your `.env` file.
+
+3. Generate the Prisma Client and apply migrations:
+
+   ```bash
+   npx prisma generate
+   npx prisma migrate dev
+   ```
+
+4. Run the development server:
+
+   ```bash
+   npm run dev
+   ```
+
+5. Open [http://localhost:3000](http://localhost:3000) to see the app.
+
+## Deployment
+
+This project is deployed on Prisma Compute, not Vercel:
 
 ```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+npx @prisma/cli app deploy --framework nextjs --env .env --prod --yes
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+## Project Structure
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+- `app/actions/` — Server Actions (purchase, sell, randomize items, add money, manage sales)
+- `app/` — pages: shop home, inventory, transactions
+- `lib/` — Prisma client setup, shop item generation, sale word list
+- `context/` — client-side React context (money, search, cart)
+- `components/` — shared UI components (item grid/card, sale timer, navbar)
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+## Data Model
 
-## Learn More
-
-To learn more about Next.js, take a look at the following resources:
-
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+- **InventoryItem** — items a session currently owns
+- **Transaction** — purchase/sale history, grouped by `orderId` for multi-item orders
+- **Balance** — a session's current money
+- **Sale** / **SaleItemUsage** — the active timed sale and its per-item remaining discount uses
+- **ShopCatalog** — the current randomized item catalog
