@@ -17,7 +17,7 @@ A Pokémon-item shop demo app built with Next.js 16 and Prisma 7. Browse a rando
 - [Prisma 7](https://www.prisma.io) with the Postgres driver adapter
 - PostgreSQL (hosted on Prisma Postgres)
 - Tailwind CSS
-- Deployed on [Prisma Compute](https://www.prisma.io/docs/postgres/compute)
+- Deployed on [Vercel](https://vercel.com)
 
 ## Getting Started
 
@@ -46,11 +46,9 @@ A Pokémon-item shop demo app built with Next.js 16 and Prisma 7. Browse a rando
 
 ## Deployment
 
-This project is deployed on Prisma Compute, not Vercel:
+Live at [altura-market.vercel.app](https://altura-market.vercel.app).
 
-```bash
-npx @prisma/cli app deploy --framework nextjs --env .env --prod --yes
-```
+This project is deployed on Vercel, connected to this GitHub repo for auto-deploy on push to `main`. The database (Prisma Postgres) is unaffected by hosting — `DATABASE_URL` is configured as a Vercel environment variable.
 
 ## Project Structure
 
