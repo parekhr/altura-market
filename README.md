@@ -48,7 +48,7 @@ A Pokémon-item shop demo app built with Next.js 16 and Prisma 7. Browse a rando
 
 Live at [altura-market.vercel.app](https://altura-market.vercel.app).
 
-This project is deployed on Vercel, connected to this GitHub repo for auto-deploy on push to `main`. The database (Prisma Postgres) is unaffected by hosting — `DATABASE_URL` is configured as a Vercel environment variable.
+This project is deployed on Vercel, connected to this GitHub repo for auto-deploy on push to `main`. The database (Prisma Postgres) is unaffected by hosting - `DATABASE_URL` is configured as a Vercel environment variable.
 
 ## Project Structure
 
