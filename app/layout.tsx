@@ -9,6 +9,14 @@ import { getBalance } from "@/app/actions/session";
 export const metadata = {
   title: "Altura Market",
   description: "A market to buy and sell Pokemon items",
+  appleWebApp: {
+    title: "Altura Market",
+    statusBarStyle: "default",
+  },
+};
+
+export const viewport = {
+  themeColor: "#70b8f0",
 };
 
 export default async function RootLayout({ children }: { children: React.ReactNode }) {
