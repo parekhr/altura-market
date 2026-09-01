@@ -8,7 +8,7 @@ import { useSearch } from "@/context/SearchContext";
 import Link from "next/link";
 
 const linkClass =
-  "flex items-center font-bold px-2 sm:px-4 text-slate-800 transition-colors hover:bg-sky-200 hover:text-slate-900";
+  "flex items-center rounded-md font-bold px-2 py-2 sm:px-4 text-slate-800 transition-colors hover:bg-sky-200 hover:text-slate-900";
 
 export default function Navbar() {
 
