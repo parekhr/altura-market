@@ -51,7 +51,7 @@ export default function ItemGrid({
 
   return (
     <>
-      <div className="mb-4 grid grid-cols-[1fr_auto_1fr] items-center gap-2">
+      <div className="mb-4 grid grid-cols-1 items-center gap-2 sm:grid-cols-[1fr_auto_1fr]">
         <div className="flex justify-self-start gap-2">
           <button
             onClick={handleRandomize}
@@ -68,7 +68,7 @@ export default function ItemGrid({
             {isAddingMoney ? "Adding..." : "Add 1000¥"}
           </button>
         </div>
-        <div className="relative">
+        <div className="relative w-full sm:w-auto">
           <svg
             xmlns="http://www.w3.org/2000/svg"
             viewBox="0 0 20 20"
@@ -86,10 +86,10 @@ export default function ItemGrid({
             value={search}
             onChange={(e) => setSearch(e.target.value)}
             placeholder="Search items..."
-            className="rounded-md border-2 border-gray-400 bg-white py-2 pl-9 pr-3 text-sm"
+            className="w-full rounded-md border-2 border-gray-400 bg-white py-2 pl-9 pr-3 text-sm sm:w-auto"
           />
         </div>
-        <div />
+        <div className="hidden sm:block" />
       </div>
       <div className="grid grid-cols-2 gap-3 sm:grid-cols-4 md:grid-cols-6 lg:grid-cols-8">
         {filteredItems.map((item) => (
