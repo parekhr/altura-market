@@ -38,6 +38,9 @@ export default function CartProvider({ children }: { children: React.ReactNode }
         }
     }, [toastMessage]);
 
+    // Adding an item already in the cart bumps its quantity instead of
+    // pushing a duplicate row, so the cart list always has at most one entry
+    // per item id.
     function addToCart(item: any) {
         if (!cartItems.some((cartItem) => cartItem.id === item.id)) {
             setCartItems((prevItems) => [...prevItems, { ...item, quantity: 1 }]);

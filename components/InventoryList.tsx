@@ -51,6 +51,12 @@ useEffect(() => {
     router.refresh();
   }
 
+  // Purely a visual effect: items are removed from the on-screen list one at
+  // a time (staggered 500ms apart) instead of all vanishing at once. The
+  // actual `sellAllItems()` server call is delayed until after the last
+  // item's animation would finish, and `visibleItems` (client-only state)
+  // is what's rendered rather than the `inventoryItems` prop — the real
+  // list update from the server arrives via `router.refresh()` afterward.
   function handleConfirmSellAll() {
     setShowSellAllModal(false);
 

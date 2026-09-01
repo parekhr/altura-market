@@ -9,6 +9,9 @@ import ItemGrid from "@/components/ItemGrid";
 
 export const dynamic = "force-dynamic";
 
+// Kept in sync with the identical helper in app/actions/purchase.ts — this
+// one decides what shows as "on sale" in the UI, that one decides what
+// actually gets discounted at checkout, so both need the same matching rule.
 function matchesSaleWord(itemName: string, word: string) {
   return itemName.toLowerCase().split("-").includes(word);
 }
@@ -21,6 +24,8 @@ export default async function HomePage() {
   const usesRemainingByItemId = new Map(saleUsages.map((u) => [u.itemId, u.usesRemaining]));
 
   const displayItems = items.map((item) => {
+    // No SaleItemUsage row means nobody has bought this item on sale yet,
+    // so it still has its full allotment of 5 discounted units.
     const usesRemaining = usesRemainingByItemId.get(item.id) ?? 5;
     const onSale = matchesSaleWord(item.itemName, sale.word) && usesRemaining > 0;
     const discountedPrice = onSale

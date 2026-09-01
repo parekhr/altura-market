@@ -24,6 +24,7 @@ async function getItem(id: number) {
   }
 }
 
+/** Picks `count` distinct integers from [1, maxId] via a Fisher-Yates shuffle. */
 function getRandomUniqueIds(count: number, maxId: number) {
   const allIds = Array.from({ length: maxId }, (_, i) => i + 1); // [1, 2, ..., maxId]
 
@@ -36,6 +37,9 @@ function getRandomUniqueIds(count: number, maxId: number) {
   return allIds.slice(0, count);
 }
 
+// Rounds to the nearest 50 by picking a random step count rather than a
+// random float, so prices always land on a "clean" number (e.g. 250, 300)
+// instead of something like 273.
 function getRandomPrice(min: number, max: number) {
   const steps = (max - min) / 50;
   const randomStep = Math.floor(Math.random() * (steps + 1));
@@ -95,6 +99,11 @@ export async function regenerateShopItems() {
   }
 }
 
+/**
+ * Reads the shared catalog row, generating one first if this is the very
+ * first request the app has ever served. Every visitor sees the same
+ * catalog — it's global, not per-session.
+ */
 export async function getShopItems() {
   let catalog = await prisma.shopCatalog.findUnique({ where: { id: CATALOG_ID } });
 

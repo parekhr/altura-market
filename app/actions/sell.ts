@@ -4,6 +4,11 @@ import { randomUUID } from "crypto";
 import { prisma } from "@/lib/prisma";
 import { getOrCreateSessionId } from "@/app/actions/session";
 
+/**
+ * Sells up to `quantity` units of one inventory row. Clamps to what's
+ * actually owned, and deletes the row instead of leaving it at 0 so empty
+ * inventory rows never accumulate.
+ */
 export async function sellItem(id: number, quantity: number) {
   const item = await prisma.inventoryItem.findUniqueOrThrow({ where: { id } });
   const sellQuantity = Math.min(quantity, item.quantity);
@@ -36,6 +41,11 @@ export async function sellItem(id: number, quantity: number) {
   });
 }
 
+/**
+ * Liquidates the entire inventory in one batch: one Transaction row per
+ * item (sharing an `orderId` so the transactions page groups them as a
+ * single sale), then credits the total sell value to the balance.
+ */
 export async function sellAllItems() {
   const sessionId = await getOrCreateSessionId();
   const orderId = randomUUID();

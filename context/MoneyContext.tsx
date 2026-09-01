@@ -15,6 +15,10 @@ export function useMoney() {
 export default function MoneyProvider({ children, initialMoney }: { children: React.ReactNode; initialMoney: number }) {
   const [money, setMoney] = useState(initialMoney);
 
+  // initialMoney comes from the server (layout.tsx re-fetches it on every
+  // navigation/router.refresh()). Without this effect, the client state set
+  // on first mount would never pick up a server-side balance change made
+  // after that — e.g. from a server action running on another page.
   useEffect(() => {
     setMoney(initialMoney);
   }, [initialMoney]);

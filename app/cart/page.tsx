@@ -22,10 +22,15 @@ export default function CartPage() {
     setShowConfirmModal(true);
   }
 
+  // Same staggered-animation pattern as InventoryList's sell-all: cart items
+  // disappear one by one (500ms apart) for visual effect before the actual
+  // purchase is submitted. `subtractMoney` here is an optimistic client-side
+  // update of the displayed balance — the authoritative balance is written
+  // server-side inside `purchaseItems`.
   function handleConfirmPurchase() {
     setShowConfirmModal(false);
     cartItems.forEach((item, index) => {
-      setTimeout(() => 
+      setTimeout(() =>
         removeFromCart(item.id), (index + 1) * 500);
     });
     setTimeout(async () => {

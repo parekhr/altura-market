@@ -13,6 +13,12 @@ pool.on("error", (err) => {
 
 const adapter = new PrismaPg(pool);
 
+// Next.js dev mode hot-reloads modules on every file save, which would
+// otherwise construct a brand-new PrismaClient (and connection pool) each
+// time. Stashing the instance on `globalThis` — which survives module
+// reloads — means dev mode reuses the same client instead of leaking a new
+// pool on every save. Not needed in production, where the module only
+// loads once per process anyway.
 const globalForPrisma = globalThis as unknown as { prisma?: PrismaClient };
 
 export const prisma = globalForPrisma.prisma ?? new PrismaClient({ adapter });

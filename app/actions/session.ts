@@ -4,6 +4,11 @@ import { cookies } from "next/headers";
 import { randomUUID } from "crypto";
 import { prisma } from "@/lib/prisma";
 
+/**
+ * The app has no real accounts — a "user" is just whoever holds this
+ * cookie. Reads the existing sessionId if present, otherwise mints a new
+ * one, sets it as an httpOnly cookie, and seeds a Balance row for it.
+ */
 export async function getOrCreateSessionId() {
   const cookieStore = await cookies();
   const existing = cookieStore.get("sessionId");
@@ -20,6 +25,12 @@ export async function getOrCreateSessionId() {
   return sessionId;
 }
 
+/**
+ * Read-only balance lookup for a first render (e.g. layout.tsx), so it
+ * doesn't create a session/cookie itself — a brand-new visitor with no
+ * cookie yet just sees the default starting balance until they take an
+ * action that calls getOrCreateSessionId.
+ */
 export async function getBalance() {
   const cookieStore = await cookies();
   const sessionId = cookieStore.get("sessionId")?.value;

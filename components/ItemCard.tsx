@@ -14,6 +14,10 @@ export default function ItemCard(props: {
   usesRemaining?: number;
 }) {
 
+    // Defensive: getRandomPrice() in lib/shopItems.ts always generates
+    // purchase_price >= 100 and sell_price >= 50, so both being 0 doesn't
+    // happen with the current catalog generator. This guards against
+    // whatever future/alternate item source might not set a price.
     const notForSale = props.purchase_price === 0 && props.sell_price === 0;
 
     const { addToCart } = useCart();
@@ -24,6 +28,9 @@ export default function ItemCard(props: {
             itemName: props.itemName,
             imageSrc: props.imageSrc,
             text: props.text,
+            // Cart stores the price actually charged — the discounted one if
+            // this card is currently on sale — so checkout doesn't need to
+            // re-check sale status for a price that might have changed by then.
             purchase_price: props.onSale && props.discountedPrice != null ? props.discountedPrice : props.purchase_price,
             sell_price: props.sell_price,
         });
