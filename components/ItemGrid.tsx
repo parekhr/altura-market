@@ -52,20 +52,33 @@ export default function ItemGrid({
   return (
     <>
       <div className="mb-4 grid grid-cols-1 items-center gap-2 sm:grid-cols-[1fr_auto_1fr]">
-        <div className="flex justify-self-start gap-2">
+        <div className="flex gap-2 sm:justify-self-start">
           <button
             onClick={handleRandomize}
             disabled={isRandomizing}
-            className="rounded-md bg-indigo-500 px-4 py-2 text-sm font-semibold text-white hover:bg-indigo-600 disabled:cursor-not-allowed disabled:opacity-60 cursor-pointer transition-colors duration-200"
+            className="grid place-items-center rounded-md bg-indigo-500 px-4 py-2 text-sm font-semibold text-white hover:bg-indigo-600 disabled:cursor-not-allowed disabled:opacity-60 cursor-pointer transition-colors duration-200"
           >
-            {isRandomizing ? "Randomizing..." : "Randomize Items"}
+            {/* Both labels are stacked in the same grid cell (via the shared
+                gridArea) so the button's width is always the wider of the
+                two — only the hidden one changes per click, not the box. */}
+            <span style={{ gridArea: "1 / 1" }} className={isRandomizing ? "invisible" : ""}>
+              Randomize Items
+            </span>
+            <span style={{ gridArea: "1 / 1" }} className={isRandomizing ? "" : "invisible"}>
+              Randomizing...
+            </span>
           </button>
           <button
             onClick={handleAddMoney}
             disabled={isAddingMoney}
-            className="rounded-md bg-emerald-500 px-4 py-2 text-sm font-semibold text-white hover:bg-emerald-600 disabled:cursor-not-allowed disabled:opacity-60 cursor-pointer transition-colors duration-200"
+            className="flex-1 grid place-items-center rounded-md bg-emerald-500 px-4 py-2 text-sm font-semibold text-white hover:bg-emerald-600 disabled:cursor-not-allowed disabled:opacity-60 cursor-pointer transition-colors duration-200 sm:flex-none"
           >
-            {isAddingMoney ? "Adding..." : "Add 1000¥"}
+            <span style={{ gridArea: "1 / 1" }} className={isAddingMoney ? "invisible" : ""}>
+              Add 1000¥
+            </span>
+            <span style={{ gridArea: "1 / 1" }} className={isAddingMoney ? "" : "invisible"}>
+              Adding...
+            </span>
           </button>
         </div>
         <div className="relative w-full sm:w-auto">
