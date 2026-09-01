@@ -56,7 +56,7 @@ export default function ItemGrid({
           <button
             onClick={handleRandomize}
             disabled={isRandomizing}
-            className="grid place-items-center rounded-md bg-indigo-500 px-4 py-2 text-sm font-semibold text-white hover:bg-indigo-600 disabled:cursor-not-allowed disabled:opacity-60 cursor-pointer transition-colors duration-200"
+            className="flex-1 grid place-items-center rounded-md bg-indigo-500 px-4 py-2 text-sm font-semibold text-white hover:bg-indigo-600 disabled:cursor-not-allowed disabled:opacity-60 cursor-pointer transition-colors duration-200"
           >
             {/* Both labels are stacked in the same grid cell (via the shared
                 gridArea) so the button's width is always the wider of the
@@ -71,7 +71,7 @@ export default function ItemGrid({
           <button
             onClick={handleAddMoney}
             disabled={isAddingMoney}
-            className="flex-1 grid place-items-center rounded-md bg-emerald-500 px-4 py-2 text-sm font-semibold text-white hover:bg-emerald-600 disabled:cursor-not-allowed disabled:opacity-60 cursor-pointer transition-colors duration-200 sm:flex-none"
+            className="flex-1 grid place-items-center rounded-md bg-emerald-500 px-4 py-2 text-sm font-semibold text-white hover:bg-emerald-600 disabled:cursor-not-allowed disabled:opacity-60 cursor-pointer transition-colors duration-200"
           >
             <span style={{ gridArea: "1 / 1" }} className={isAddingMoney ? "invisible" : ""}>
               Add 1000¥
