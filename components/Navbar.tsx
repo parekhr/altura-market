@@ -8,7 +8,7 @@ import { useSearch } from "@/context/SearchContext";
 import Link from "next/link";
 
 const linkClass =
-  "flex items-center rounded-md font-bold px-2 py-2 sm:px-4 text-slate-800 transition-colors hover:bg-sky-200 hover:text-slate-900";
+  "flex items-center rounded-md font-bold px-2 py-2 sm:px-4 text-white transition-colors hover:bg-sky-200 hover:text-slate-500";
 
 export default function Navbar() {
 
@@ -24,12 +24,12 @@ export default function Navbar() {
   return (
     <nav className="bg-[#70b8f0] px-3 py-2 sm:px-6">
   <div className="flex min-h-12 items-center justify-between">
-    <Link href="/" onClick={() => { setSearch(""); closeMenu(); }} className="flex items-center text-lg font-bold text-sky-900">
+    <Link href="/" onClick={() => { setSearch(""); closeMenu(); }} className="flex items-center text-lg font-bold text-white">
       Altura Market
     </Link>
 
     <div className="flex items-center gap-2">
-      <span className="flex items-center rounded-md border border-emerald-700 bg-emerald-100 px-2 py-2 font-bold text-emerald-800">
+      <span className="flex items-center rounded-md border border-emerald-700 bg-emerald-500 px-2 py-2 font-bold text-white">
         Balance: {money}¥
       </span>
 
@@ -54,7 +54,7 @@ export default function Navbar() {
         onClick={() => setMenuOpen((open) => !open)}
         aria-label={menuOpen ? "Close menu" : "Open menu"}
         aria-expanded={menuOpen}
-        className="flex items-center justify-center rounded-md p-2 text-slate-800 transition-colors hover:bg-sky-200 sm:hidden"
+        className="flex items-center justify-center rounded-md p-2 text-white transition-colors hover:bg-sky-200 hover:text-slate-900 sm:hidden"
       >
         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} strokeLinecap="round" className="h-6 w-6">
           {menuOpen ? (
