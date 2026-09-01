@@ -50,15 +50,13 @@ export default function CartPage() {
 
   return (
     <>
-      { cartItems.length === 0 ? (
-        <div className="flex h-screen flex-col items-center justify-center gap-4">
-          <h1 className="text-2xl font-bold text-slate-900">Cart</h1>
-          <p className="text-lg text-slate-700">Your cart is currently empty.</p>
-        </div>
-        ) : (
   <div className="flex h-screen max-w-2xl mx-auto flex-col items-center justify-center px-4">
     <div className="w-full rounded-2xl border border-gray-200 bg-white p-8 shadow-md">
       <h1 className="text-2xl font-bold">Cart</h1>
+      { cartItems.length === 0 ? (
+        <p className="mt-4 text-lg text-slate-700">Your cart is currently empty.</p>
+        ) : (
+        <>
       <p className="text-lg text-slate-700">Items in your cart: {cartItems.length}</p>
       <div className="divide-y divide-gray-300 border-y border-gray-300">
         {cartItems.map((item) => (
@@ -102,9 +100,10 @@ export default function CartPage() {
           }}>
           Purchase
        </button>
+        </>
+      ) }
     </div>
   </div>
-) }
     {showConfirmModal && (
       <div className="fixed inset-0 flex items-center justify-center bg-black/50 px-4">
         <div className="w-full max-w-sm rounded-2xl bg-white p-6 shadow-xl">
